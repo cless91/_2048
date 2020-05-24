@@ -85,10 +85,11 @@ public class _2048Test {
         @Test
         void moveRightEasier() {
             game = _2048.fromTiles(
-                    createTile2(2, 2),
                     createTile2(0, 2),
-                    createTile2(3, 2),
-                    createTile2(2, 3));
+                    createTile2(2, 2),
+                    createTile2(2, 3),
+                    createTile2(3, 2)
+            );
             game.moveRight();
 
             assertThat(game.getTiles())
@@ -110,6 +111,39 @@ public class _2048Test {
                             createTile2(2, 2),
                             createTile(2, 3, 4),
                             createTile2(3, 3));
+        }
+
+        @Test
+        void moveRight2() {
+            game = _2048.fromTiles(
+                    createTile2(0, 2),
+                    createTile2(2, 0),
+                    createTile2(2, 1),
+                    createTile2(2, 2),
+                    createTile2(2, 3),
+                    createTile2(3, 2)
+            );
+
+            game.moveRight();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(
+                            createTile2(0, 3),
+                            createTile(2, 2,4),
+                            createTile(2, 3,4),
+                            createTile2(3, 3)
+                    );
+
+            game.moveRight();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(
+                            createTile2(0, 3),
+                            createTile(2, 3,8),
+                            createTile2(3, 3)
+                    );
         }
     }
 }
