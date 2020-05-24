@@ -37,20 +37,20 @@ public class _2048 {
 
     public void moveRight() {
         for (int rowIndex = 0; rowIndex < size; rowIndex++) {
-            int yMax = maxCoord;
+            int yLim = maxCoord;
             Iterator<Tile> tileIterator = sortRowRightToLeft(rowIndex);
             Tile currentElement = getNextTileRightToLeft(tileIterator);
             while (currentElement != null) {
-                currentElement.y = yMax;
+                currentElement.y = yLim;
                 Tile nextElement = getNextTileRightToLeft(tileIterator);
                 if (nextElement != null) {
                     if (nextElement.value == currentElement.value) {
                         currentElement.value *= 2;
                         tiles.remove(nextElement);
-                        yMax--;
+                        yLim--;
                     } else {
                         nextElement.y = currentElement.y - 1;
-                        yMax -= 2;
+                        yLim -= 2;
                     }
                 }
                 currentElement = getNextTileRightToLeft(tileIterator);
@@ -69,8 +69,35 @@ public class _2048 {
                 .iterator();
     }
 
+    private Iterator<Tile> sortRowLeftToRight(int rowIndex) {
+        Iterator<Tile> iterator = tiles.stream()
+                .filter(tile -> tile.x == rowIndex)
+                .sorted(Comparator.comparingInt(tile -> tile.y))
+                .iterator();
+        return iterator;
+    }
+
     public void moveLeft() {
-        tiles.forEach(tile -> tile.y = 0);
+        for (int rowIndex = 0; rowIndex < size; rowIndex++) {
+            int yLim = 0;
+            Iterator<Tile> tileIterator = sortRowLeftToRight(rowIndex);
+            Tile currentElement = getNextTileRightToLeft(tileIterator);
+            while (currentElement != null) {
+                currentElement.y = yLim;
+                Tile nextElement = getNextTileRightToLeft(tileIterator);
+                if (nextElement != null) {
+                    if (nextElement.value == currentElement.value) {
+                        currentElement.value *= 2;
+                        tiles.remove(nextElement);
+                        yLim++;
+                    } else {
+                        nextElement.y = currentElement.y + 1;
+                        yLim += 2;
+                    }
+                }
+                currentElement = getNextTileRightToLeft(tileIterator);
+            }
+        }
     }
 
     public void moveUp() {
