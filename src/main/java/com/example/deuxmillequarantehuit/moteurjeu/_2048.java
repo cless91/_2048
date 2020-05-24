@@ -132,6 +132,25 @@ public class _2048 {
     }
 
     public void moveDown() {
-        tiles.forEach(tile -> tile.x = maxCoord);
+        for (int colIndex = 0; colIndex < size; colIndex++) {
+            int xLim = maxCoord;
+            Iterator<Tile> tileIterator = sortRowUpToDown(colIndex);
+            Tile currentElement = getNextTile(tileIterator);
+            while (currentElement != null) {
+                currentElement.x = xLim;
+                Tile nextElement = getNextTile(tileIterator);
+                if (nextElement != null) {
+                    if (nextElement.value == currentElement.value) {
+                        currentElement.value *= 2;
+                        tiles.remove(nextElement);
+                        xLim--;
+                    } else {
+                        nextElement.x = currentElement.x - 1;
+                        xLim -= 2;
+                    }
+                }
+                currentElement = getNextTile(tileIterator);
+            }
+        }
     }
 }

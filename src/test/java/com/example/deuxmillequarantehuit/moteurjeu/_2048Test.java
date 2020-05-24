@@ -426,21 +426,22 @@ public class _2048Test {
         @Test
         void moveDown() {
             game = _2048.fromTiles(
-                    createTile2(2, 2),
                     createTile2(0, 2),
                     createTile2(2, 0),
-                    createTile2(3, 2),
-                    createTile2(2, 3));
+                    createTile2(2, 2),
+                    createTile2(2, 3),
+                    createTile2(3, 2)
+            );
 
             game.moveDown();
 
             assertThat(game.getTiles())
                     .usingFieldByFieldElementComparator()
                     .containsExactlyInAnyOrder(
-                            createTile2(0, 0),
-                            createTile(0, 2, 4),
-                            createTile2(1, 2),
-                            createTile2(0, 3));
+                            createTile2(3, 0),
+                            createTile(3, 2, 4),
+                            createTile2(2, 2),
+                            createTile2(3, 3));
         }
 
         @Test
@@ -459,10 +460,10 @@ public class _2048Test {
             assertThat(game.getTiles())
                     .usingFieldByFieldElementComparator()
                     .containsExactlyInAnyOrder(
-                            createTile2(0, 0),
-                            createTile(0, 2, 4),
-                            createTile(1, 2, 4),
-                            createTile2(0, 3)
+                            createTile2(3, 0),
+                            createTile(3, 2, 4),
+                            createTile(2, 2, 4),
+                            createTile2(3, 3)
                     );
 
             game.moveDown();
@@ -470,9 +471,9 @@ public class _2048Test {
             assertThat(game.getTiles())
                     .usingFieldByFieldElementComparator()
                     .containsExactlyInAnyOrder(
-                            createTile2(0, 0),
-                            createTile(0, 2, 8),
-                            createTile2(0, 3)
+                            createTile2(3, 0),
+                            createTile(3, 2, 8),
+                            createTile2(3, 3)
                     );
         }
 
@@ -488,11 +489,11 @@ public class _2048Test {
 
             game.moveDown();
 
-            Tile[] expectedTiles = {createTile2(0, 0),
-                    createTile2(0, 2),
-                    createTile(1, 2, 4),
-                    createTile2(2, 2),
-                    createTile2(0, 3)};
+            Tile[] expectedTiles = {createTile2(3, 0),
+                    createTile2(3, 2),
+                    createTile(2, 2, 4),
+                    createTile2(1, 2),
+                    createTile2(3, 3)};
             assertThat(game.getTiles())
                     .usingFieldByFieldElementComparator()
                     .containsExactlyInAnyOrder(expectedTiles);
@@ -523,9 +524,9 @@ public class _2048Test {
                             Arrays.asList(
                                     createTile2(0, 2),
                                     createTile(1, 2, 4),
-                                    createTile2(2, 0),
+                                    createTile2(3, 0),
                                     createTile(2, 2, 4),
-                                    createTile2(2, 3),
+                                    createTile2(3, 3),
                                     createTile2(3, 2))
                     );
         }
