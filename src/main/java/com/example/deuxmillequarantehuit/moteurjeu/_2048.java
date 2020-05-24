@@ -39,10 +39,10 @@ public class _2048 {
         for (int rowIndex = 0; rowIndex < size; rowIndex++) {
             int yLim = maxCoord;
             Iterator<Tile> tileIterator = sortRowRightToLeft(rowIndex);
-            Tile currentElement = getNextTileRightToLeft(tileIterator);
+            Tile currentElement = getNextTile(tileIterator);
             while (currentElement != null) {
                 currentElement.y = yLim;
-                Tile nextElement = getNextTileRightToLeft(tileIterator);
+                Tile nextElement = getNextTile(tileIterator);
                 if (nextElement != null) {
                     if (nextElement.value == currentElement.value) {
                         currentElement.value *= 2;
@@ -53,12 +53,12 @@ public class _2048 {
                         yLim -= 2;
                     }
                 }
-                currentElement = getNextTileRightToLeft(tileIterator);
+                currentElement = getNextTile(tileIterator);
             }
         }
     }
 
-    private Tile getNextTileRightToLeft(Iterator<Tile> sortedTilesIterator) {
+    private Tile getNextTile(Iterator<Tile> sortedTilesIterator) {
         return sortedTilesIterator.hasNext() ? sortedTilesIterator.next() : null;
     }
 
@@ -77,14 +77,22 @@ public class _2048 {
         return iterator;
     }
 
+    private Iterator<Tile> sortRowUpToDown(int colIndex) {
+        Iterator<Tile> iterator = tiles.stream()
+                .filter(tile -> tile.y == colIndex)
+                .sorted(Comparator.comparingInt(tile -> tile.x))
+                .iterator();
+        return iterator;
+    }
+
     public void moveLeft() {
         for (int rowIndex = 0; rowIndex < size; rowIndex++) {
             int yLim = 0;
             Iterator<Tile> tileIterator = sortRowLeftToRight(rowIndex);
-            Tile currentElement = getNextTileRightToLeft(tileIterator);
+            Tile currentElement = getNextTile(tileIterator);
             while (currentElement != null) {
                 currentElement.y = yLim;
-                Tile nextElement = getNextTileRightToLeft(tileIterator);
+                Tile nextElement = getNextTile(tileIterator);
                 if (nextElement != null) {
                     if (nextElement.value == currentElement.value) {
                         currentElement.value *= 2;
@@ -95,13 +103,32 @@ public class _2048 {
                         yLim += 2;
                     }
                 }
-                currentElement = getNextTileRightToLeft(tileIterator);
+                currentElement = getNextTile(tileIterator);
             }
         }
     }
 
     public void moveUp() {
-        tiles.forEach(tile -> tile.x = 0);
+        for (int colIndex = 0; colIndex < size; colIndex++) {
+            int xLim = 0;
+            Iterator<Tile> tileIterator = sortRowUpToDown(colIndex);
+            Tile currentElement = getNextTile(tileIterator);
+            while (currentElement != null) {
+                currentElement.x = xLim;
+                Tile nextElement = getNextTile(tileIterator);
+                if (nextElement != null) {
+                    if (nextElement.value == currentElement.value) {
+                        currentElement.value *= 2;
+                        tiles.remove(nextElement);
+                        xLim++;
+                    } else {
+                        nextElement.x = currentElement.x + 1;
+                        xLim += 2;
+                    }
+                }
+                currentElement = getNextTile(tileIterator);
+            }
+        }
     }
 
     public void moveDown() {

@@ -314,4 +314,108 @@ public class _2048Test {
                     .containsExactlyInAnyOrder(tiles);
         }
     }
+
+    @Nested
+    public class MoveUp {
+
+        @Test
+        void moveUp() {
+            game = _2048.fromTiles(
+                    createTile2(2, 2),
+                    createTile2(0, 2),
+                    createTile2(2, 0),
+                    createTile2(3, 2),
+                    createTile2(2, 3));
+
+            game.moveUp();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(
+                            createTile2(0, 0),
+                            createTile(0, 2, 4),
+                            createTile2(1, 2),
+                            createTile2(0, 3));
+        }
+
+        @Test
+        void moveUp2() {
+            game = _2048.fromTiles(
+                    createTile2(0, 2),
+                    createTile2(1, 2),
+                    createTile2(2, 2),
+                    createTile2(3, 2),
+                    createTile2(2, 0),
+                    createTile2(2, 3)
+            );
+
+            game.moveUp();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(
+                            createTile2(0, 0),
+                            createTile(0, 2, 4),
+                            createTile(1, 2, 4),
+                            createTile2(0, 3)
+                    );
+
+            game.moveUp();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(
+                            createTile2(0, 0),
+                            createTile(0, 2, 8),
+                            createTile2(0, 3)
+                    );
+        }
+
+        @Test
+        void moveUpCannotMerge() {
+            game = _2048.fromTiles(
+                    createTile2(0, 2),
+                    createTile2(2, 0),
+                    createTile(2, 2, 4),
+                    createTile2(2, 3),
+                    createTile2(3, 2)
+            );
+
+            game.moveUp();
+
+            Tile[] expectedTiles = {createTile2(0, 0),
+                    createTile2(0, 2),
+                    createTile(1, 2, 4),
+                    createTile2(2, 2),
+                    createTile2(0, 3)};
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(expectedTiles);
+
+            game.moveUp();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(expectedTiles);
+        }
+
+        @Test
+        void moveUpCannotMerge2() {
+            Tile[] tiles = {
+                    createTile2(0, 2),
+                    createTile(1, 2, 4),
+                    createTile2(2, 0),
+                    createTile(2, 2, 4),
+                    createTile2(2, 3),
+                    createTile2(3, 2)
+            };
+            game = _2048.fromTiles(tiles);
+
+            game.moveUp();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(tiles);
+        }
+    }
 }
