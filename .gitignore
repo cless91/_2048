@@ -29,3 +29,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.attach_pid*
+.jqwik-database
+.mvn/
+mvnw
+mvnw.cmd
