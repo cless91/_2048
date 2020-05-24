@@ -36,25 +36,37 @@ public class _2048 {
     }
 
     public void moveRight() {
-        for (int i = 0; i < size; i++) {
-            int finalI = i;
-            Iterator<Tile> tileIterator = tiles.stream()
-                    .filter(tile -> tile.x == finalI)
-                    .sorted(Comparator.comparingInt(tile -> ((Tile) tile).y).reversed())
-                    .iterator();
-            Optional<Tile> currentElement = tileIterator.hasNext() ? Optional.of(tileIterator.next()) : Optional.empty();
-            Optional<Tile> nextElement = tileIterator.hasNext() ? Optional.of(tileIterator.next()) : Optional.empty();
-            currentElement.ifPresent(currentTile -> {
-                currentTile.y = maxCoord;
-                nextElement.ifPresent(nextTile -> {
-                    if(Objects.equals(nextTile.value, currentTile.value)){
-                        currentTile.value *= 2;
-                        tiles.remove(nextTile);
+        for (int rowIndex = 0; rowIndex < size; rowIndex++) {
+            int yMax = maxCoord;
+            Iterator<Tile> tileIterator = sortRowRightToLeft(rowIndex);
+            Tile currentElement = getNextTileRightToLeft(tileIterator);
+            while (currentElement != null) {
+                currentElement.y = yMax;
+                Tile nextElement = getNextTileRightToLeft(tileIterator);
+                if (nextElement != null) {
+                    if (nextElement.value == currentElement.value) {
+                        currentElement.value *= 2;
+                        tiles.remove(nextElement);
+                        yMax--;
+                    } else {
+                        nextElement.y = currentElement.y - 1;
+                        yMax -= 2;
                     }
-                });
-            });
+                }
+                currentElement = getNextTileRightToLeft(tileIterator);
+            }
         }
-        tiles.forEach(tile -> tile.y = maxCoord);
+    }
+
+    private Tile getNextTileRightToLeft(Iterator<Tile> sortedTilesIterator) {
+        return sortedTilesIterator.hasNext() ? sortedTilesIterator.next() : null;
+    }
+
+    private Iterator<Tile> sortRowRightToLeft(int rowIndex) {
+        return tiles.stream()
+                .filter(tile -> tile.x == rowIndex)
+                .sorted(Comparator.comparingInt(tile -> ((Tile) tile).y).reversed())
+                .iterator();
     }
 
     public void moveLeft() {

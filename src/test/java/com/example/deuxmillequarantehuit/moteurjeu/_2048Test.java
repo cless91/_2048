@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
+import static com.example.deuxmillequarantehuit.moteurjeu.Tile.createTile;
+import static com.example.deuxmillequarantehuit.moteurjeu.Tile.createTile2;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class _2048Test {
@@ -31,7 +33,7 @@ public class _2048Test {
 
         @BeforeEach
         void setUp() {
-            game = _2048.fromTiles(Tile.createTile2(2, 2));
+            game = _2048.fromTiles(createTile2(2, 2));
         }
 
         @Test
@@ -73,28 +75,41 @@ public class _2048Test {
         @BeforeEach
         void setUp() {
             game = _2048.fromTiles(
-                    Tile.createTile2(2, 2),
-                    Tile.createTile2(0, 2),
-                    Tile.createTile2(2, 0),
-                    Tile.createTile2(3, 2),
-                    Tile.createTile2(2, 3));
+                    createTile2(2, 2),
+                    createTile2(0, 2),
+                    createTile2(2, 0),
+                    createTile2(3, 2),
+                    createTile2(2, 3));
         }
 
         @Test
         void moveRightEasier() {
             game = _2048.fromTiles(
-                    Tile.createTile2(2, 2),
-                    Tile.createTile2(0, 2),
-                    Tile.createTile2(3, 2),
-                    Tile.createTile2(2, 3));
+                    createTile2(2, 2),
+                    createTile2(0, 2),
+                    createTile2(3, 2),
+                    createTile2(2, 3));
             game.moveRight();
 
             assertThat(game.getTiles())
                     .usingFieldByFieldElementComparator()
                     .containsExactlyInAnyOrder(
-                            Tile.createTile2(0, 3),
-                            Tile.createTile(2, 3, 4),
-                            Tile.createTile2(3, 3));
+                            createTile2(0, 3),
+                            createTile(2, 3, 4),
+                            createTile2(3, 3));
+        }
+
+        @Test
+        void moveRight() {
+            game.moveRight();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(
+                            createTile2(0, 3),
+                            createTile2(2, 2),
+                            createTile(2, 3, 4),
+                            createTile2(3, 3));
         }
     }
 }
