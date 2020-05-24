@@ -3,8 +3,9 @@ package com.example.deuxmillequarantehuit.moteurjeu;
 import java.util.*;
 
 public class _2048 {
+    private final int maxCoord;
     List<Tile> tiles = new ArrayList<>();
-    private int size;
+    private final int size;
 
     private _2048() {
         this(4);
@@ -12,6 +13,7 @@ public class _2048 {
 
     private _2048(int size) {
         this.size = size;
+        maxCoord = size - 1;
     }
 
     public static _2048 newRegularGame() {
@@ -34,7 +36,25 @@ public class _2048 {
     }
 
     public void moveRight() {
-        tiles.forEach(tile -> tile.y = size - 1);
+        for (int i = 0; i < size; i++) {
+            int finalI = i;
+            Iterator<Tile> tileIterator = tiles.stream()
+                    .filter(tile -> tile.x == finalI)
+                    .sorted(Comparator.comparingInt(tile -> ((Tile) tile).y).reversed())
+                    .iterator();
+            Optional<Tile> currentElement = tileIterator.hasNext() ? Optional.of(tileIterator.next()) : Optional.empty();
+            Optional<Tile> nextElement = tileIterator.hasNext() ? Optional.of(tileIterator.next()) : Optional.empty();
+            currentElement.ifPresent(currentTile -> {
+                currentTile.y = maxCoord;
+                nextElement.ifPresent(nextTile -> {
+                    if(Objects.equals(nextTile.value, currentTile.value)){
+                        currentTile.value *= 2;
+                        tiles.remove(nextTile);
+                    }
+                });
+            });
+        }
+        tiles.forEach(tile -> tile.y = maxCoord);
     }
 
     public void moveLeft() {
@@ -46,6 +66,6 @@ public class _2048 {
     }
 
     public void moveDown() {
-        tiles.forEach(tile -> tile.x = size - 1);
+        tiles.forEach(tile -> tile.x = maxCoord);
     }
 }
