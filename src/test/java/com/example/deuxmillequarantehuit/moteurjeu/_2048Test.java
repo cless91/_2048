@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import static com.example.deuxmillequarantehuit.moteurjeu.Tile.createTile;
@@ -416,6 +417,117 @@ public class _2048Test {
             assertThat(game.getTiles())
                     .usingFieldByFieldElementComparator()
                     .containsExactlyInAnyOrder(tiles);
+        }
+    }
+
+    @Nested
+    public class MoveDown {
+
+        @Test
+        void moveDown() {
+            game = _2048.fromTiles(
+                    createTile2(2, 2),
+                    createTile2(0, 2),
+                    createTile2(2, 0),
+                    createTile2(3, 2),
+                    createTile2(2, 3));
+
+            game.moveDown();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(
+                            createTile2(0, 0),
+                            createTile(0, 2, 4),
+                            createTile2(1, 2),
+                            createTile2(0, 3));
+        }
+
+        @Test
+        void moveDown2() {
+            game = _2048.fromTiles(
+                    createTile2(0, 2),
+                    createTile2(1, 2),
+                    createTile2(2, 2),
+                    createTile2(3, 2),
+                    createTile2(2, 0),
+                    createTile2(2, 3)
+            );
+
+            game.moveDown();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(
+                            createTile2(0, 0),
+                            createTile(0, 2, 4),
+                            createTile(1, 2, 4),
+                            createTile2(0, 3)
+                    );
+
+            game.moveDown();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(
+                            createTile2(0, 0),
+                            createTile(0, 2, 8),
+                            createTile2(0, 3)
+                    );
+        }
+
+        @Test
+        void moveDownCannotMerge() {
+            game = _2048.fromTiles(
+                    createTile2(0, 2),
+                    createTile2(2, 0),
+                    createTile(2, 2, 4),
+                    createTile2(2, 3),
+                    createTile2(3, 2)
+            );
+
+            game.moveDown();
+
+            Tile[] expectedTiles = {createTile2(0, 0),
+                    createTile2(0, 2),
+                    createTile(1, 2, 4),
+                    createTile2(2, 2),
+                    createTile2(0, 3)};
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(expectedTiles);
+
+            game.moveDown();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(expectedTiles);
+        }
+
+        @Test
+        void moveDownCannotMerge2() {
+            game = _2048.fromTiles(
+                    createTile2(0, 2),
+                    createTile(1, 2, 4),
+                    createTile2(2, 0),
+                    createTile(2, 2, 4),
+                    createTile2(2, 3),
+                    createTile2(3, 2)
+            );
+
+            game.moveDown();
+
+            assertThat(game.getTiles())
+                    .usingFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrderElementsOf(
+                            Arrays.asList(
+                                    createTile2(0, 2),
+                                    createTile(1, 2, 4),
+                                    createTile2(2, 0),
+                                    createTile(2, 2, 4),
+                                    createTile2(2, 3),
+                                    createTile2(3, 2))
+                    );
         }
     }
 }
